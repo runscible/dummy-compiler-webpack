@@ -1,29 +1,16 @@
-import React, { useContext, useReducer } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
-import ApolloClient from 'apollo-boost';
-import {ApolloProvider} from 'react-apollo';
-import './index.scss';
-import {Travels} from "./pages/Travels";
+import { Index } from "./pages";
 
 const elem = document.getElementById('root');
-import { client } from './components/business/client';
-import { Context } from './components/business/Context';
-import { Reducer } from './components/business/Reducer';
-
 
 function App (){
-    const initialState = useContext(Context);
-    const [state, dispatch] = useReducer(Reducer, initialState);
     return (
         <>
-            <Context.Provider value={{ state, dispatch }}>  
-                <Travels/>
-            </Context.Provider>
+                <Index />
         </>
     )
 }
-elem ? ReactDOM.render(<ApolloProvider client={client}>
-                            <App />
-                      </ApolloProvider>,
+elem ? ReactDOM.render(<App />,
                         elem):
                         document.write('<h1>ocurrio un eror a la hora de renderizar la página</h1>');
