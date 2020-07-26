@@ -1,13 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Index } from "./pages";
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { Index } from "./pages/index"
+import { Page2 } from './pages/page_2'
 
-const elem = document.getElementById('root');
+const elem = document.getElementById('root')
 
 function App (){
     return (
         <>
                 <Index />
+                <Page2 />
         </>
     )
 }
