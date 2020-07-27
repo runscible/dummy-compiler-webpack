@@ -6,9 +6,19 @@ const glob = require('glob')
 function populateOptions() {
     const result = {}
     glob.sync('src/pages/*').map(val => result[val] = `./${val}/index.js` )
+    populatePlugins()
     return result
 }
 
+function populatePlugins () {
+    const result = []
+    glob.sync('src/pages/*').map(val => result.push(new HtmlWebPackPlugin({
+        template: "./src/index.html",
+        filename: `${val}/index.html`,
+        inlineSource: '.(js|css)$'
+    })))
+    return result
+}
 const configPHP = () => (
     {
         entry: {
@@ -16,7 +26,7 @@ const configPHP = () => (
         },
         output: {
             path: path.resolve(__dirname, './dist'),
-            filename: "[name].js"
+            filename: "[name]/index.js"
         },
         module: {
             rules: [
@@ -49,11 +59,7 @@ const configPHP = () => (
             ]
         },
         plugins: [
-            new HtmlWebPackPlugin({
-                template: "./src/index.html",
-                filename: "./index.html",
-                inlineSource: '.(js|css)$'
-            }),
+            ...populatePlugins(),
             new MiniCSSExtractPlugin({
                 filename: "./src/**/*.scss"
             })
@@ -102,7 +108,7 @@ const defaultConfig = () => (
         plugins: [
             new HtmlWebPackPlugin({
                 template: "./src/index.html",
-                filename: "./index.html",
+                filename: "./test/index.html",
                 inlineSource: '.(js|css)$'
             }),
             new MiniCSSExtractPlugin({
@@ -112,11 +118,8 @@ const defaultConfig = () => (
         mode: 'development'
     }
 )
-module.exports = function() {
-    if (process.env.TYPE && process.env.TYPE == 'php') {
-        return configPHP()
-    } else {
-        return defaultConfig()
-    }
+module.exports = function () {
+    if (process.env.TYPE && process.env.TYPE === 'php') return configPHP();
+    else return defaultConfig();
 }
  
