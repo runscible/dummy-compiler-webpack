@@ -111,7 +111,7 @@ const defaultConfig = () => (
         plugins: [
             new HtmlWebPackPlugin({
                 template: "./src/index.html",
-                filename: "./test/index.html",
+                filename: "index.html",
                 inlineSource: '.(js|css)$',
             }),
             new MiniCSSExtractPlugin({
