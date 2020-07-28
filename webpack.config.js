@@ -6,16 +6,19 @@ const glob = require('glob')
 function populateOptions() {
     const result = {}
     glob.sync('src/pages/*').map(val => result[val] = `./${val}/index.js` )
-    populatePlugins()
     return result
 }
 
 function populatePlugins () {
     const result = []
     glob.sync('src/pages/*').map(val => result.push(new HtmlWebPackPlugin({
-        template: "./src/index.html",
-        filename: `${val}/index.html`,
-        inlineSource: '.(js|css)$'
+        relativePathJS: val,
+        filename: `${val}/index.twig`,
+        inject: false,
+        templateContent: ({ htmlWebpackPlugin }) => {
+            console.log('this is htmlWebPackPlugin', htmlWebpackPlugin)
+            return `<pre>no me acuerdo como se escribia el putisimo tag :/ ${htmlWebpackPlugin.options.relativePathJS}</pre>`
+        },
     })))
     return result
 }
@@ -64,7 +67,7 @@ const configPHP = () => (
                 filename: "./src/**/*.scss"
             })
         ],
-        mode: 'development'
+        mode: 'production'
     }
 ) 
 
@@ -109,13 +112,13 @@ const defaultConfig = () => (
             new HtmlWebPackPlugin({
                 template: "./src/index.html",
                 filename: "./test/index.html",
-                inlineSource: '.(js|css)$'
+                inlineSource: '.(js|css)$',
             }),
             new MiniCSSExtractPlugin({
                 filename: "./src/**/*.scss"
             })
         ],
-        mode: 'development'
+        mode: 'production'
     }
 )
 module.exports = function () {
