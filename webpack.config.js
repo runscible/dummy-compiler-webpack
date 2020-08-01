@@ -16,8 +16,18 @@ function populatePlugins () {
         filename: `${val}/index.twig`,
         inject: false,
         templateContent: ({ htmlWebpackPlugin }) => {
-            console.log('this is htmlWebPackPlugin', htmlWebpackPlugin)
-            return `<pre>no me acuerdo como se escribia el putisimo tag :/ ${htmlWebpackPlugin.options.relativePathJS}</pre>`
+            return `<!DOCTYPE html>
+                            <html lang="en">
+                                <head>
+                                    <meta charset="UTF-8">
+                                    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+                                </head>
+                            <body>
+                                <div id="root"></div>
+                                <script type="text/javascript" src='${htmlWebpackPlugin.options.relativePathJS }'>
+                                </script>
+                            </body>
+                            </html>`
         },
     })))
     return result
@@ -67,6 +77,26 @@ const configPHP = () => (
                 filename: "./src/**/*.scss"
             })
         ],
+        optimization: {
+            chunkIds: "named",
+            splitChunks: {
+                cacheGroups: {
+                    commons: {
+                        chunks: "initial",
+                        minChunks: 2,
+                        maxInitialRequests: 5, 
+                        minSize: 5 
+                    },
+                    vendor: {
+                        test: /node_modules/,
+                        chunks: "initial",
+                        name: "vendor",
+                        priority: 10,
+                        enforce: true
+                    }
+                }
+            }
+        },
         mode: 'production'
     }
 ) 
